@@ -10,7 +10,8 @@ public class Player : MonoBehaviour
     private PlayerData playerData;
     private bool _isGameOver;
     
-    // Question 6 : Ajout d'un mode AI  - attribut pour activer le mode AI
+    // attribut pour activer le mode AI
+    private bool _isAIMode = true;
 
     private List<Vector2> path; //chemin de Djikstra
     private int currentPathIndex; 
@@ -22,8 +23,6 @@ public class Player : MonoBehaviour
     private int stuckCounter = 0; //nombre de fois ou le chemin est bloque
     private float backtrackDistance = 2f; // distance de recul pour essayer un nouveau chemin
 
-    //Question 4 : Gestion de l'évènement fin du jeu
-    
     void Start()
     {
         _isGameOver = false;
@@ -32,10 +31,7 @@ public class Player : MonoBehaviour
         playerData.plummie_tag = "nraboy";
         path = new List<Vector2>();
         lastPosition = transform.position;
-        // Question 6 : Ajout d'un mode AI  - calcul du chemin
-        // rajouter l'appel de fonction requis
-
-        //Question 4 : Gestion de l'évènement fin du jeu
+        //CalculatePath();
     }
 
     //methode qui calcule le chemin a prendre en Mode AI
@@ -97,32 +93,23 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Question 3: Calcul et mise à jour des scores 
-
         if (!_isGameOver)
         {
-            //introduire le mode AI dans cette fonction
+            //introduit le mode AI
             //si le jeu est en mode AI alors le AI controlle le mouvement 
             //sinon le joueur peut controller le mouvement
-
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
-            movement = new Vector2(h * speed, v * speed);
-
-           
-            //Question 6 - Mode AI
-            /*if (!...)
+            if (!_isAIMode)
             {
-                
+                float h = Input.GetAxis("Horizontal");
+                float v = Input.GetAxis("Vertical");
+                movement = new Vector2(h * speed, v * speed);
             }
             else
             {
                 UpdateAIMovement();
                 CheckIfStuck();
-            }*/
+            }
         }
-
-        //Question 5 : Sauvegarde de la progression du jeu 
     }
 
     //mouvement automatique controlle par le mode AI
@@ -172,10 +159,7 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         playerData.collisions++;
-
-        // Question 6 : Ajout d'un mode AI  - verifie si on est bloque apres une collision
-        // corriger pour faire fonctionner le mode AI
-       /*if (...)
+        if (_isAIMode)
         {
             stuckCounter++; // incremente le compteur de detection lorsque le joueur est bloque
             if (stuckCounter > 2) // si il y a trop de collisions alors le jouur est bloque
@@ -186,7 +170,7 @@ public class Player : MonoBehaviour
             {
                 CalculatePath();
             }
-        }*/
+        }
     }
 
     //dessin et coloration des gizmos
@@ -201,6 +185,4 @@ public class Player : MonoBehaviour
             }
         }
     }
-
-    //Question 4 : Gestion de l'évènement fin du jeu
 }
